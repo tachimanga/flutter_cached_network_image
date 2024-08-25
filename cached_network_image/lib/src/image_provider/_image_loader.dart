@@ -27,6 +27,7 @@ class ImageLoader implements platform.ImageLoader {
     int? maxHeight,
     int? maxWidth,
     Map<String, String>? headers,
+    Map<String, String>? extInfo,
     Function()? errorListener,
     ImageRenderMethodForWeb imageRenderMethodForWeb,
     Function() evictImage,
@@ -40,6 +41,7 @@ class ImageLoader implements platform.ImageLoader {
       maxHeight,
       maxWidth,
       headers,
+      extInfo,
       errorListener,
       imageRenderMethodForWeb,
       evictImage,
@@ -56,6 +58,7 @@ class ImageLoader implements platform.ImageLoader {
       int? maxHeight,
       int? maxWidth,
       Map<String, String>? headers,
+      Map<String, String>? extInfo,
       Function()? errorListener,
       ImageRenderMethodForWeb imageRenderMethodForWeb,
       Function() evictImage) {
@@ -71,6 +74,7 @@ class ImageLoader implements platform.ImageLoader {
       maxHeight,
       maxWidth,
       headers,
+      extInfo,
       errorListener,
       imageRenderMethodForWeb,
       evictImage,
@@ -86,6 +90,7 @@ class ImageLoader implements platform.ImageLoader {
     int? maxHeight,
     int? maxWidth,
     Map<String, String>? headers,
+    Map<String, String>? extInfo,
     Function()? errorListener,
     ImageRenderMethodForWeb imageRenderMethodForWeb,
     Function() evictImage,
@@ -106,7 +111,10 @@ class ImageLoader implements platform.ImageLoader {
               headers: headers,
               key: cacheKey)
           : cacheManager.getFileStream(url,
-              withProgress: true, headers: headers, key: cacheKey);
+              withProgress: true,
+              headers: headers,
+              extInfo: extInfo,
+              key: cacheKey);
 
       await for (var result in stream) {
         if (result is DownloadProgress) {

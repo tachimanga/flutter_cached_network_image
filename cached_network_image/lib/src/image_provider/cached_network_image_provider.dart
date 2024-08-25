@@ -34,6 +34,7 @@ class CachedNetworkImageProvider
     this.cacheManager,
     this.cacheKey,
     this.imageRenderMethodForWeb = ImageRenderMethodForWeb.HtmlImage,
+    this.extInfo,
   });
 
   /// CacheManager from which the image files are loaded.
@@ -64,6 +65,9 @@ class CachedNetworkImageProvider
 
   /// Render option for images on the web platform.
   final ImageRenderMethodForWeb imageRenderMethodForWeb;
+
+  /// Optional ext_info
+  final Map<String, String>? extInfo;
 
   @override
   Future<CachedNetworkImageProvider> obtainKey(
@@ -108,6 +112,7 @@ class CachedNetworkImageProvider
       maxHeight,
       maxWidth,
       headers,
+      extInfo,
       errorListener,
       imageRenderMethodForWeb,
       () => PaintingBinding.instance.imageCache.evict(key),
@@ -147,6 +152,7 @@ class CachedNetworkImageProvider
       maxHeight,
       maxWidth,
       headers,
+      extInfo,
       errorListener,
       imageRenderMethodForWeb,
       () => PaintingBinding.instance.imageCache.evict(key),
