@@ -208,13 +208,16 @@ class CachedNetworkImageProvider
       return ((cacheKey ?? url) == (other.cacheKey ?? other.url)) &&
           scale == other.scale &&
           maxHeight == other.maxHeight &&
-          maxWidth == other.maxWidth;
+          maxWidth == other.maxWidth &&
+          maxDecodePixelWidth == other.maxDecodePixelWidth &&
+          maxDecodePixelHeight == other.maxDecodePixelHeight;
     }
     return false;
   }
 
   @override
-  int get hashCode => Object.hash(cacheKey ?? url, scale, maxHeight, maxWidth);
+  int get hashCode => Object.hash(cacheKey ?? url, scale, maxHeight, maxWidth,
+      maxDecodePixelWidth, maxDecodePixelHeight);
 
   @override
   String toString() => '$runtimeType("$url", scale: $scale)';
