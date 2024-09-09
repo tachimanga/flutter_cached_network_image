@@ -239,6 +239,8 @@ class CachedNetworkImage extends StatelessWidget {
     this.maxHeightDiskCache,
     this.imageSizeCache,
     Map<String, String>? extInfo,
+    int? maxDecodePixelWidth,
+    int? maxDecodePixelHeight,
     ImageRenderMethodForWeb imageRenderMethodForWeb =
         ImageRenderMethodForWeb.HtmlImage,
   })  : _image = CachedNetworkImageProvider(
@@ -250,6 +252,8 @@ class CachedNetworkImage extends StatelessWidget {
           maxWidth: maxWidthDiskCache,
           maxHeight: maxHeightDiskCache,
           extInfo: extInfo,
+          maxDecodePixelWidth: maxDecodePixelWidth,
+          maxDecodePixelHeight: maxDecodePixelHeight,
         ),
         super(key: key);
 

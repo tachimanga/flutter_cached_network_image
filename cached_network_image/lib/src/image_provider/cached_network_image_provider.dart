@@ -1,5 +1,5 @@
 import 'dart:async' show Future, StreamController;
-import 'dart:ui' as ui show Codec;
+import 'dart:ui' as ui show Codec, ImmutableBuffer, TargetImageSize;
 
 import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart'
     show ImageRenderMethodForWeb;
@@ -35,6 +35,8 @@ class CachedNetworkImageProvider
     this.cacheKey,
     this.imageRenderMethodForWeb = ImageRenderMethodForWeb.HtmlImage,
     this.extInfo,
+    this.maxDecodePixelWidth,
+    this.maxDecodePixelHeight,
   });
 
   /// CacheManager from which the image files are loaded.
@@ -68,6 +70,10 @@ class CachedNetworkImageProvider
 
   /// Optional ext_info
   final Map<String, String>? extInfo;
+
+  /// decode pixels limit
+  final int? maxDecodePixelWidth;
+  final int? maxDecodePixelHeight;
 
   @override
   Future<CachedNetworkImageProvider> obtainKey(
@@ -125,6 +131,43 @@ class CachedNetworkImageProvider
     final chunkEvents = StreamController<ImageChunkEvent>();
     return MultiImageStreamCompleter(
       codec: _loadBufferAsync(key, chunkEvents, decode),
+      chunkEvents: chunkEvents.stream,
+      scale: key.scale,
+      informationCollector: () sync* {
+        yield DiagnosticsProperty<ImageProvider>(
+          'Image provider: $this \n Image key: $key',
+          this,
+          style: DiagnosticsTreeStyle.errorProperty,
+        );
+      },
+    );
+  }
+
+  @override
+  ImageStreamCompleter loadImage(image_provider.CachedNetworkImageProvider key, ImageDecoderCallback decode) {
+    final chunkEvents = StreamController<ImageChunkEvent>();
+    return MultiImageStreamCompleter(
+      codec: _loadBufferAsync(key, chunkEvents, (ui.ImmutableBuffer buffer, {int? cacheWidth, int? cacheHeight, bool? allowUpscaling}) {
+        if (maxDecodePixelWidth != null || maxDecodePixelHeight != null) {
+          // print("[DEBUG]_loadBufferAsync cacheWidth$cacheWidth $cacheHeight $allowUpscaling");
+          // print("[DEBUG]_loadBufferAsync maxDecodedPixel $maxDecodePixelWidth $maxDecodePixelHeight");
+          return decode(buffer, getTargetSize: (int intrinsicWidth, int intrinsicHeight) {
+            // print("[DEBUG]getTargetSize $intrinsicWidth $intrinsicHeight");
+            int? width = null;
+            int? height = null;
+            if (maxDecodePixelWidth != null && intrinsicWidth > maxDecodePixelWidth!) {
+              // print("[DEBUG]getTargetSize limit wdith");
+              width = maxDecodePixelWidth!;
+            }
+            if (maxDecodePixelHeight != null && intrinsicHeight > maxDecodePixelHeight!) {
+              // print("[DEBUG]getTargetSize limit height");
+              height = maxDecodePixelHeight!;
+            }
+            return ui.TargetImageSize(width: width, height: height);
+          });
+        }
+        return decode(buffer);
+      }),
       chunkEvents: chunkEvents.stream,
       scale: key.scale,
       informationCollector: () sync* {
