@@ -204,6 +204,9 @@ class CachedNetworkImage extends StatelessWidget {
   /// ImageSizeCache
   final ImageSizeCache? imageSizeCache;
 
+  /// device pixel ratio for pixels align
+  final double? pixelsAlignDPR;
+
   /// CachedNetworkImage shows a network image using a caching mechanism. It also
   /// provides support for a placeholder, showing an error and fading into the
   /// loaded image. Next to that it supports most features of a default Image
@@ -238,6 +241,7 @@ class CachedNetworkImage extends StatelessWidget {
     this.maxWidthDiskCache,
     this.maxHeightDiskCache,
     this.imageSizeCache,
+    this.pixelsAlignDPR,
     Map<String, String>? extInfo,
     int? maxDecodePixelWidth,
     int? maxDecodePixelHeight,
@@ -296,6 +300,7 @@ class CachedNetworkImage extends StatelessWidget {
       memCacheWidth: memCacheWidth,
       memCacheHeight: memCacheHeight,
       imageSizeCache: imageSizeCache,
+      pixelsAlignDPR: pixelsAlignDPR,
     );
   }
 
