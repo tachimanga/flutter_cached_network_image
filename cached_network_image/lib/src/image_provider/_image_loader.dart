@@ -16,38 +16,6 @@ import 'package:cached_network_image_platform_interface'
 
 /// ImageLoader class to load images on IO platforms.
 class ImageLoader implements platform.ImageLoader {
-  @Deprecated('use loadBufferAsync instead')
-  @override
-  Stream<ui.Codec> loadAsync(
-    String url,
-    String? cacheKey,
-    StreamController<ImageChunkEvent> chunkEvents,
-    DecoderCallback decode,
-    BaseCacheManager cacheManager,
-    int? maxHeight,
-    int? maxWidth,
-    Map<String, String>? headers,
-    Map<String, String>? extInfo,
-    Function()? errorListener,
-    ImageRenderMethodForWeb imageRenderMethodForWeb,
-    Function() evictImage,
-  ) {
-    return _load(
-      url,
-      cacheKey,
-      chunkEvents,
-      decode,
-      cacheManager,
-      maxHeight,
-      maxWidth,
-      headers,
-      extInfo,
-      errorListener,
-      imageRenderMethodForWeb,
-      evictImage,
-    );
-  }
-
   @override
   Stream<ui.Codec> loadBufferAsync(
       String url,
